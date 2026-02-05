@@ -137,6 +137,68 @@ function processVideoDescriptions() {
 }
 
 // ==========================================================================
+// LOGIC: INJECT WATCH LATER BUTTON (If Missing)
+// ==========================================================================
+function processWatchLater() {
+    // 1. Check if Watch Later link already exists
+    const existingBtn = document.querySelector('a[href="/playlist?list=WL"]');
+    if (existingBtn) return;
+
+    // 2. Find a sibling to insert after (Playlists or History) to ensure correct position
+    const playlistsLink = document.querySelector('a[href="/feed/playlists"]');
+    const historyLink = document.querySelector('a[href="/feed/history"]');
+    
+    // Determine the reference node (we want to insert AFTER this node)
+    let referenceNode = null;
+    if (playlistsLink) {
+        referenceNode = playlistsLink.closest('ytd-guide-entry-renderer');
+    } else if (historyLink) {
+        referenceNode = historyLink.closest('ytd-guide-entry-renderer');
+    }
+
+    // 3. Insert the button if we found a place for it
+    if (referenceNode && referenceNode.parentElement) {
+        const container = referenceNode.parentElement;
+        
+        // HTML string provided by user (cleaned up slightly)
+        const watchLaterHTML = `
+        <ytd-guide-entry-renderer class="style-scope ytd-guide-collapsible-section-entry-renderer" line-end-style="none">
+            <a id="endpoint" class="yt-simple-endpoint style-scope ytd-guide-entry-renderer" tabindex="-1" role="link" href="/playlist?list=WL" title="Watch later">
+                <tp-yt-paper-item role="link" class="style-scope ytd-guide-entry-renderer" style-target="host" tabindex="0" aria-disabled="false">
+                    <yt-icon class="guide-icon style-scope ytd-guide-entry-renderer">
+                        <span class="yt-icon-shape style-scope yt-icon ytSpecIconShapeHost">
+                            <div style="width: 100%; height: 100%; display: block; fill: currentcolor;">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" focusable="false" aria-hidden="true" style="pointer-events: none; display: inherit; width: 100%; height: 100%;">
+                                    <path d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1Zm0 2a9 9 0 110 18.001A9 9 0 0112 3Zm0 3a1 1 0 00-1 1v5.565l.485.292 3.33 2a1 1 0 001.03-1.714L13 11.435V7a1 1 0 00-1-1Z"></path>
+                                </svg>
+                            </div>
+                        </span>
+                    </yt-icon>
+                    <yt-formatted-string class="title style-scope ytd-guide-entry-renderer">Watch later</yt-formatted-string>
+                </tp-yt-paper-item>
+            </a>
+            <yt-interaction class="style-scope ytd-guide-entry-renderer">
+                <div class="stroke style-scope yt-interaction"></div>
+                <div class="fill style-scope yt-interaction"></div>
+            </yt-interaction>
+        </ytd-guide-entry-renderer>
+        `;
+
+        // Create a document fragment from the HTML string
+        const range = document.createRange();
+        range.selectNode(document.body);
+        const fragment = range.createContextualFragment(watchLaterHTML);
+
+        // Insert after the reference node
+        if (referenceNode.nextSibling) {
+            container.insertBefore(fragment, referenceNode.nextSibling);
+        } else {
+            container.appendChild(fragment);
+        }
+    }
+}
+
+// ==========================================================================
 // LOGIC: TEMPORARY SIDEBAR INJECTION (Forces Grid to List Reflow)
 // ==========================================================================
 let hasTriggeredLayoutFix = false;
@@ -204,6 +266,7 @@ const observer = new MutationObserver((mutations) => {
 
         processSubscriptionsHeader();
         processVideoDescriptions();
+        processWatchLater();
 
         const items = document.querySelectorAll('ytd-rich-item-renderer');
         if (items.length > 0) {
