@@ -52,3 +52,7 @@ Since this is a developer build, you can install it via "Load Unpacked":
 * **Performance:**
     * The extension uses a `MutationObserver` to detect when YouTube loads new videos (infinite scroll) and applies styles dynamically.
     * Video descriptions are fetched via individual `fetch()` requests to the video URL to parse the meta description tag.
+
+## 📈 Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=engin0223/Youtube-List-View-Extension&type=Date)](https://star-history.com/#engin0223/Youtube-List-View-Extension&Date)
