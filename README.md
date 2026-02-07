@@ -1,5 +1,7 @@
 # YouTube Subscriptions List View
 
+Forked from [https://github.com/engin0223/Youtube-List-View-Extension](https://github.com/engin0223/Youtube-List-View-Extension) and modified for use in Firefox.
+
 **YouTube Subscriptions List View** is a Chrome Extension (Manifest V3) that forces the YouTube Subscriptions and Home feeds into a classic, readable **List View** layout.
 
 Modern YouTube forces a "Rich Grid" layout that hides video descriptions and truncates metadata. This extension restores the vertical list format, fetches the missing video descriptions, and provides a customizable UI to adjust the layout to your preference.
@@ -24,15 +26,7 @@ Modern YouTube forces a "Rich Grid" layout that hides video descriptions and tru
 
 ## 🛠️ Installation
 
-Since this is a developer build, you can install it via "Load Unpacked":
-
-1.  **Download** the source files into a folder named `youtube-list-view`.
-    * Ensure `manifest.json`, `content.js`, `styles.css`, `popup.html`, and `popup.js` are all in the root of this folder.
-2.  Open Google Chrome and navigate to `chrome://extensions/`.
-3.  Enable **Developer mode** using the toggle switch in the top right corner.
-4.  Click the **Load unpacked** button.
-5.  Select the `youtube-list-view` folder you created in Step 1.
-6.  The extension is now active! Go to YouTube to see the changes.
+Download the .xpi file from Releases.  Open **Extensions and Themes** in Firefox Settings and then click the gear wheel icon at the top right and choose **Install Add-on From File**.  Naviagate to the .xpi file and double-click it.
 
 ## ⚙️ Usage
 
