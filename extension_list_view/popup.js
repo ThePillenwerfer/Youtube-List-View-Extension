@@ -43,13 +43,24 @@ if (inputs.highlightLinks) {
     });
 }
 
-// Helper: Send settings to active tab (Live Preview)
+// Helper: Send settings to ALL YouTube tabs
 function sendToTab() {
     const settings = getCurrentSettings();
-    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-        if (tabs[0]) {
-            chrome.tabs.sendMessage(tabs[0].id, {action: "updateSettings", settings: settings});
-        }
+    
+    // CHANGED: We now strictly ask Chrome for tabs matching the YouTube URL pattern.
+    // This respects the 'host_permissions' in manifest.json and avoids permission errors.
+    chrome.tabs.query({url: "https://www.youtube.com/*"}, (tabs) => {
+        if (!tabs || tabs.length === 0) return;
+
+        tabs.forEach((tab) => {
+            // Send the message to every YouTube tab found (active or background)
+            chrome.tabs.sendMessage(tab.id, {action: "updateSettings", settings: settings}, () => {
+                // Suppress errors (e.g., if a tab is loading or the content script isn't ready)
+                if (chrome.runtime.lastError) {
+                    // console.log("Tab not ready:", tab.id); // Optional debug
+                }
+            });
+        });
     });
 }
 

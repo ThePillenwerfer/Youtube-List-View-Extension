@@ -4,7 +4,7 @@
   "version": "0.1",
   "description": "Forces YouTube into a list view with customizable settings.",
   "permissions": [
-    "storage"
+    "storage", "tabs"
   ],
   "action": {
     "default_popup": "popup.html"
